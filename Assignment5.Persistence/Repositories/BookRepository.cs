@@ -162,7 +162,7 @@ namespace Assignment5.Persistence.Repositories
                     (!string.IsNullOrEmpty(query.category) && b.category.ToLower().Contains(query.category.ToLower())) ||
                     (!string.IsNullOrEmpty(query.language) && b.language.ToLower().Contains(query.language.ToLower()))
                 );
-            }
+            }   
             else // Default to AND logic
             {
                 if (!string.IsNullOrEmpty(query.title))

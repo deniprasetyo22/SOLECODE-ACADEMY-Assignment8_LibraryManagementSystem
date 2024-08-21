@@ -1,4 +1,5 @@
-﻿using Assignment5.Application.DTOs;
+﻿using Asp.Versioning;
+using Assignment5.Application.DTOs;
 using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment5.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -26,15 +29,18 @@ namespace Assignment5.WebAPI.Controllers
         ///
         ///     POST /api/User
         ///     {
-        ///         "firstName": "Deni",
-        ///         "lastName": "Prasetyo",
-        ///         "position": "Librarian",
-        ///         "privilage": "string"
+        ///        "firstName": "Deni",
+        ///        "lastName": "Prasetyo",
+        ///        "position": "Library Manager",
+        ///        "privilage": "Can Add User",
+        ///        "libraryCardNumber": "L-11111",
+        ///        "notes":"admin"
         ///     }
         /// </remarks>
         /// <param name="user">The user to be added.</param>
         /// <returns>Success message if the user is added successfully, or an error message if validation fails.</returns>
         [HttpPost]
+        [MapToApiVersion("1.0")]
         public async Task<ActionResult<User>> AddUser([FromBody] User user)
         {
             if (user == null)
@@ -58,6 +64,7 @@ namespace Assignment5.WebAPI.Controllers
         /// </remarks>
         /// <returns>A list of users.</returns>
         [HttpGet]
+        [MapToApiVersion("1.0")]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers([FromQuery] paginationDto pagination)
         {
             var users = await _userService.GetAllUsers(pagination);
@@ -77,6 +84,7 @@ namespace Assignment5.WebAPI.Controllers
         /// <param name="userId">The ID of the user to be retrieved.</param>
         /// <returns>User details if found, otherwise an error message.</returns>
         [HttpGet("{userId}")]
+        [MapToApiVersion("1.0")]
         public async Task<ActionResult<User>> GetUserById(int userId)
         {
             if (userId <= 0)
@@ -101,17 +109,19 @@ namespace Assignment5.WebAPI.Controllers
         ///
         ///     PUT /api/User/1
         ///     {
-        ///        "fname": "Ahmad",
-        ///        "lname": "Rizal",
-        ///        "address": "Jl.Tiga, Surabaya",
-        ///        "dob": "1994-05-10",
-        ///        "sex": "Male"
+        ///        "firstName": "Deni",
+        ///        "lastName": "Prasetyo",
+        ///        "position": "Library Manager",
+        ///        "privilage": "Can Add User",
+        ///        "libraryCardNumber": "L-11111",
+        ///        "notes":"admin"
         ///     }
         /// </remarks>
         /// <param name="userId">The ID of the user to be updated.</param>
         /// <param name="user">The updated user data.</param>
         /// <returns>Success message if the user is updated successfully, or an error message if validation fails.</returns>
         [HttpPut("{userId}")]
+        [MapToApiVersion("1.0")]
         public async Task<IActionResult> UpdateUser(int userId, [FromBody] User user)
         {
             if (user == null)
@@ -139,6 +149,7 @@ namespace Assignment5.WebAPI.Controllers
         /// <param name="userId">The ID of the user to be deleted.</param>
         /// <returns>Success message if the user is deleted successfully, or an error message if the user is not found.</returns>
         [HttpDelete("{userId}")]
+        [MapToApiVersion("1.0")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             var success = await _userService.DeleteUser(userId);
