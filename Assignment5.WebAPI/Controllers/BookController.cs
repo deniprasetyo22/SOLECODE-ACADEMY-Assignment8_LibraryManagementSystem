@@ -74,9 +74,9 @@ namespace Assignment5.WebAPI.Controllers
         /// </remarks>
         /// <returns>A list of books.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetAllBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetAllBooks([FromQuery] paginationDto pagination)
         {
-            var books = await _bookService.GetAllBooks();
+            var books = await _bookService.GetAllBooks(pagination); 
             return Ok(books);
         }
 
@@ -161,6 +161,12 @@ namespace Assignment5.WebAPI.Controllers
         [HttpDelete("{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId,[FromBody] string reason)
         {
+            // Memeriksa apakah reason adalah null atau kosong
+            if (string.IsNullOrEmpty(reason))
+            {
+                return BadRequest("The reason should not be empty.");
+            }
+
             var success = await _bookService.DeleteBook(bookId, reason);
             if (!success)
             {

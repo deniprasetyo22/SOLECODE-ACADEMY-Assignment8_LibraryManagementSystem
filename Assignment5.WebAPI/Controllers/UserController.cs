@@ -1,4 +1,5 @@
-﻿using Assignment5.Application.Interfaces.IService;
+﻿using Assignment5.Application.DTOs;
+using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,9 +58,9 @@ namespace Assignment5.WebAPI.Controllers
         /// </remarks>
         /// <returns>A list of users.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers([FromQuery] paginationDto pagination)
         {
-            var users = await _userService.GetAllUsers();
+            var users = await _userService.GetAllUsers(pagination);
             return Ok(users);
         }
 

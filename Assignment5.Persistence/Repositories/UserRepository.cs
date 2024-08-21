@@ -1,4 +1,5 @@
-﻿using Assignment5.Application.Interfaces.IRepositories;
+﻿using Assignment5.Application.DTOs;
+using Assignment5.Application.Interfaces.IRepositories;
 using Assignment5.Domain.Models;
 using Assignment5.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -24,9 +25,10 @@ namespace Assignment5.Persistence.Repositories
             await _context.SaveChangesAsync();
             return user;
         }
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsers(paginationDto pagination)
         {
-            return await _context.Users.ToListAsync();
+            var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
+            return await _context.Users.Skip(skipNumber).Take(pagination.pageSize).ToListAsync();
         }
         public async Task<User> GetUserById(int userId)
         {
@@ -53,6 +55,7 @@ namespace Assignment5.Persistence.Repositories
             existingUser.position = user.position;
             existingUser.privilage = user.privilage;
             existingUser.libraryCardNumber = user.libraryCardNumber;
+            existingUser.notes = user.notes;
             
             await _context.SaveChangesAsync();
             return true;

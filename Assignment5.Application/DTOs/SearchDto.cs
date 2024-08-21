@@ -12,7 +12,6 @@ namespace Assignment5.Application.DTOs
         public string? category { get; set; } = null;
         public string? title {  get; set; } = null;
         public string? author { get; set; } = null;
-        public string? sortBy {  get; set; } = null;
-        public bool IsDescending {  get; set; } = false;
+        public string? logicOperator { get; set; }
     }
 }

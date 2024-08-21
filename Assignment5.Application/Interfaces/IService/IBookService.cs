@@ -11,7 +11,7 @@ namespace Assignment5.Application.Interfaces.IService
     public interface IBookService
     {
         Task<Book> AddBook(Book book);
-        Task<IEnumerable<Book>> GetAllBooks();
+        Task<IEnumerable<Book>> GetAllBooks(paginationDto pagination);
         Task<Book?> GetBookById(int bookId);
         Task<bool> UpdateBook(int bookId, Book book);
         Task<bool> DeleteBook(int bookId, string reason);

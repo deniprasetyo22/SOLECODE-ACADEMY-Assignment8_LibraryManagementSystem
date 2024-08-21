@@ -28,9 +28,12 @@ namespace Assignment5.Domain.Models
         public string? position {  get; set; }
 
         [StringLength(255)]
-        public string? privilage {  get; set; } = null;
+        public string? privilage {  get; set; }
 
         [StringLength(255)]
-        public string? libraryCardNumber { get; set; } = null;
+        public string? libraryCardNumber { get; set; }
+
+        [StringLength(255)]
+        public string? notes { get; set; }
     }
 }

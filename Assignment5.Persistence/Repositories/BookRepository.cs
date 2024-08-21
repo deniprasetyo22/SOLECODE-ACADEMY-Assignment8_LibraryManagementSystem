@@ -2,6 +2,7 @@
 using Assignment5.Application.Interfaces.IRepositories;
 using Assignment5.Domain.Models;
 using Assignment5.Persistence.Context;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,14 @@ namespace Assignment5.Persistence.Repositories
             return book;
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks(paginationDto pagination)
         {
-            return await _context.Books.ToListAsync();
+            var books = _context.Books
+                .Where(cek => !cek.status.Contains("Deleted"));
+
+            var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
+
+            return await books.Skip(skipNumber).Take(pagination.pageSize).ToListAsync();
         }
 
         public async Task<Book?> GetBookById(int bookId)
@@ -90,13 +96,19 @@ namespace Assignment5.Persistence.Repositories
 
         public async Task<bool> DeleteBook(int bookId, string reason)
         {
+            // Memeriksa apakah reason adalah null atau kosong
+            if (string.IsNullOrEmpty(reason))
+            {
+                return false;
+            }
+
             var deleteBook = await _context.Books.FindAsync(bookId);
             if (deleteBook == null)
             {
                 return false;
             }
 
-            deleteBook.status = "Deleted at" + DateTime.UtcNow;
+            deleteBook.status = "Deleted at " + DateTime.UtcNow;
             deleteBook.reason = reason;
 
             await _context.SaveChangesAsync();
@@ -107,38 +119,40 @@ namespace Assignment5.Persistence.Repositories
         {
             var search = _context.Books.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.ISBN))
+            // Logika pencarian berdasarkan OR
+            if (query.logicOperator.Equals("OR", StringComparison.OrdinalIgnoreCase))
             {
-                search = search.Where(b => b.ISBN.Contains(query.ISBN));
+                search = search.Where(b =>
+                    (!string.IsNullOrEmpty(query.title) && b.title.ToLower().Contains(query.title.ToLower())) ||
+                    (!string.IsNullOrEmpty(query.author) && b.author.ToLower().Contains(query.author.ToLower())) ||
+                    (!string.IsNullOrEmpty(query.ISBN) && b.ISBN.ToLower().Contains(query.ISBN.ToLower())) ||
+                    (!string.IsNullOrEmpty(query.category) && b.category.ToLower().Contains(query.category.ToLower()))
+                );
+            }
+            else // Default to AND logic
+            {
+                if (!string.IsNullOrEmpty(query.title))
+                    search = search.Where(b => b.title.ToLower().Contains(query.title.ToLower()));
+
+                if (!string.IsNullOrEmpty(query.author))
+                    search = search.Where(b => b.author.ToLower().Contains(query.author.ToLower()));
+
+                if (!string.IsNullOrEmpty(query.ISBN))
+                    search = search.Where(b => b.ISBN.ToLower().Contains(query.ISBN.ToLower()));
+
+                if (!string.IsNullOrEmpty(query.category))
+                    search = search.Where(b => b.category.ToLower().Contains(query.category.ToLower()));
             }
 
-            if (!string.IsNullOrWhiteSpace(query.category))
-            {
-                search = search.Where(b => b.category.Contains(query.category));
-            }
+            //Sorting
+            search = search.OrderBy(b => b.title);
 
-            if (!string.IsNullOrWhiteSpace(query.title))
-            {
-                search = search.Where(b => b.title.Contains(query.title));
-            }
-
-            if (!string.IsNullOrWhiteSpace(query.author))
-            {
-                search = search.Where(b => b.author.Contains(query.author));
-            }
-            
-            if (!string.IsNullOrWhiteSpace(query.sortBy))
-            {
-                if(query.sortBy.Equals("title", StringComparison.OrdinalIgnoreCase))
-                {
-                    search = query.IsDescending ? search.OrderByDescending(o => o.title) : search.OrderBy(o => o.title);
-                }
-            }
-
+            // Paginasi
             var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
 
             return await search.Skip(skipNumber).Take(pagination.pageSize).ToListAsync();
         }
+
 
     }
 }

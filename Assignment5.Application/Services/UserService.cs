@@ -1,4 +1,5 @@
-﻿using Assignment5.Application.Interfaces.IRepositories;
+﻿using Assignment5.Application.DTOs;
+using Assignment5.Application.Interfaces.IRepositories;
 using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
 using System;
@@ -22,9 +23,9 @@ namespace Assignment5.Application.Services
             return await _userRepository.AddUser(user);
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsers(paginationDto pagination)
         {
-            return await _userRepository.GetAllUsers();
+            return await _userRepository.GetAllUsers(pagination);
         }
 
         public async Task<User> GetUserById(int userId)

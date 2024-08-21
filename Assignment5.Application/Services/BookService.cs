@@ -24,9 +24,9 @@ namespace Assignment5.Application.Services
             return await _bookRepository.AddBook(book);
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks(paginationDto pagination)
         {
-            return await _bookRepository.GetAllBooks();
+            return await _bookRepository.GetAllBooks(pagination);
         }
 
         public async Task<Book?> GetBookById(int bookId)
