@@ -35,26 +35,58 @@ namespace Assignment5.Persistence.Repositories
             return book;
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks(paginationDto pagination)
+        public async Task<IEnumerable<ShowBookDto>> GetAllBooks(paginationDto pagination)
         {
             var books = _context.Books
                 .Where(cek => !cek.status.Contains("Deleted"));
 
             var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
 
-            return await books.Skip(skipNumber).Take(pagination.pageSize).ToListAsync();
+            return await books
+                .Skip(skipNumber)
+                .Take(pagination.pageSize)
+                .Select(b => new ShowBookDto
+                {
+                    Id = b.bookId,
+                    category = b.category,
+                    title = b.title,
+                    ISBN = b.ISBN,
+                    author = b.author,
+                    publisher = b.publisher,
+                    description = b.description,
+                    location = b.location,
+                    totalBook = b.totalBook,
+                    language = b.language
+                })
+                .OrderBy(b => b.title)
+                .ToListAsync();
         }
 
-        public async Task<Book?> GetBookById(int bookId)
+        public async Task<ShowBookDto> GetBookById(int bookId)
         {
-            var existingBook = await _context.Books.FirstOrDefaultAsync(cek => cek.bookId == bookId);
-            
+            var existingBook = await _context.Books
+                .Where(cek => cek.bookId == bookId)
+                .Select(b => new ShowBookDto
+                {
+                    Id = b.bookId,
+                    category = b.category,
+                    title = b.title,
+                    ISBN = b.ISBN,
+                    author = b.author,
+                    publisher = b.publisher,
+                    description = b.description,
+                    location = b.location,
+                    totalBook = b.totalBook,
+                    language = b.language
+                })
+                .FirstOrDefaultAsync();
+
             if (existingBook == null)
             {
                 return null;
             }
 
-            return await _context.Books.FindAsync(bookId);
+            return existingBook;
         }
 
         public async Task<bool> UpdateBook(int bookId, Book book)
@@ -89,6 +121,7 @@ namespace Assignment5.Persistence.Repositories
             existingBook.location = book.location;
             existingBook.price = book.price;
             existingBook.totalBook = book.totalBook;
+            existingBook.language = book.language;
 
             await _context.SaveChangesAsync();
             return true;
@@ -115,7 +148,7 @@ namespace Assignment5.Persistence.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Book>> Search(SearchDto query, paginationDto pagination)
+        public async Task<IEnumerable<ShowBookDto>> Search(SearchDto query, paginationDto pagination)
         {
             var search = _context.Books.AsQueryable();
 
@@ -126,7 +159,8 @@ namespace Assignment5.Persistence.Repositories
                     (!string.IsNullOrEmpty(query.title) && b.title.ToLower().Contains(query.title.ToLower())) ||
                     (!string.IsNullOrEmpty(query.author) && b.author.ToLower().Contains(query.author.ToLower())) ||
                     (!string.IsNullOrEmpty(query.ISBN) && b.ISBN.ToLower().Contains(query.ISBN.ToLower())) ||
-                    (!string.IsNullOrEmpty(query.category) && b.category.ToLower().Contains(query.category.ToLower()))
+                    (!string.IsNullOrEmpty(query.category) && b.category.ToLower().Contains(query.category.ToLower())) ||
+                    (!string.IsNullOrEmpty(query.language) && b.language.ToLower().Contains(query.language.ToLower()))
                 );
             }
             else // Default to AND logic
@@ -142,15 +176,32 @@ namespace Assignment5.Persistence.Repositories
 
                 if (!string.IsNullOrEmpty(query.category))
                     search = search.Where(b => b.category.ToLower().Contains(query.category.ToLower()));
+                
+                if (!string.IsNullOrEmpty(query.language))
+                    search = search.Where(b => b.language.ToLower().Contains(query.language.ToLower()));
             }
-
-            //Sorting
-            search = search.OrderBy(b => b.title);
 
             // Paginasi
             var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
 
-            return await search.Skip(skipNumber).Take(pagination.pageSize).ToListAsync();
+            return await search
+                .Skip(skipNumber)
+                .Take(pagination.pageSize)
+                .Select(b => new ShowBookDto
+                {
+                    Id = b.bookId,
+                    category = b.category,
+                    title = b.title,
+                    ISBN = b.ISBN,
+                    author = b.author,
+                    publisher = b.publisher,
+                    description = b.description,
+                    location = b.location,
+                    totalBook = b.totalBook,
+                    language = b.language
+                })
+                .OrderBy(b => b.title)
+                .ToListAsync();
         }
 
 

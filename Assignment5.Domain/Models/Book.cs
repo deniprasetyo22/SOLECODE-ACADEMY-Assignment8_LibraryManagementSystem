@@ -52,9 +52,12 @@ namespace Assignment5.Domain.Models
         public int totalBook {  get; set; }
 
         [StringLength(255)]
-        public string? status { get; set; } = null;
+        public string? status { get; set; }
 
         [StringLength(255)]
-        public string? reason { get; set; } = null;
+        public string? reason { get; set; }
+
+        [StringLength(255)]
+        public string? language {  get; set; }
     }
 }

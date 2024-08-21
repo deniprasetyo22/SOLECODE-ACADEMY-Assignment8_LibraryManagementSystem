@@ -24,12 +24,12 @@ namespace Assignment5.Application.Services
             return await _bookRepository.AddBook(book);
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooks(paginationDto pagination)
+        public async Task<IEnumerable<ShowBookDto>> GetAllBooks(paginationDto pagination)
         {
             return await _bookRepository.GetAllBooks(pagination);
         }
 
-        public async Task<Book?> GetBookById(int bookId)
+        public async Task<ShowBookDto> GetBookById(int bookId)
         {
             return await _bookRepository.GetBookById(bookId);
         }
@@ -44,7 +44,7 @@ namespace Assignment5.Application.Services
             return await _bookRepository.DeleteBook(bookId, reason);
         }
 
-        public async Task<IEnumerable<Book>> Search(SearchDto query, paginationDto pagination)
+        public async Task<IEnumerable<ShowBookDto>> Search(SearchDto query, paginationDto pagination)
         {
             return await _bookRepository.Search(query, pagination);
         }
