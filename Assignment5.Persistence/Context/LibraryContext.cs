@@ -1,4 +1,5 @@
 ﻿using Assignment5.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,8 @@ using System.Threading.Tasks;
 
 namespace Assignment5.Persistence.Context
 {
-    public class LibraryContext:DbContext
+    public partial class LibraryContext : IdentityDbContext<AppUser>
     {
-        public LibraryContext()
-        {
-        }
-
         public LibraryContext(DbContextOptions<LibraryContext> options): base(options)
         {
         }

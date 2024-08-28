@@ -2,11 +2,13 @@
 using Assignment5.Application.DTOs;
 using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment5.WebAPI.Controllers
 {
+    [Authorize]
     [ApiVersion("1.0")]
     [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[Controller]")]
@@ -46,6 +48,7 @@ namespace Assignment5.WebAPI.Controllers
         /// If a book with the same ISBN or Title already exists, returns a 400 Bad Request response with an error message.
         /// If the input data is invalid, returns a 400 Bad Request response with an error message.
         /// </returns>
+        [Authorize(Roles = "Library Manager")]
         [HttpPost]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> AddBook([FromBody] Book book)
@@ -77,6 +80,7 @@ namespace Assignment5.WebAPI.Controllers
         ///     GET /api/Book
         /// </remarks>
         /// <returns>A list of books.</returns>
+        [Authorize(Roles = "Library Manager, Librarian, Library User")]
         [HttpGet]
         [MapToApiVersion("1.0")]
         public async Task<ActionResult<IEnumerable<Book>>> GetAllBooks([FromQuery] paginationDto pagination)
@@ -97,6 +101,7 @@ namespace Assignment5.WebAPI.Controllers
         /// </remarks>
         /// <param name="bookId">The ID of the book to be retrieved.</param>
         /// <returns>Book details if found, otherwise an error message.</returns>
+        [Authorize(Roles = "Library Manager, Librarian, Library User")]
         [HttpGet("{bookId}")]
         [MapToApiVersion("1.0")]
         public async Task<ActionResult<Book>> GetBookById(int bookId)
@@ -135,6 +140,7 @@ namespace Assignment5.WebAPI.Controllers
         /// <param name="bookId">The ID of the book to be updated.</param>
         /// <param name="book">The updated book details.</param>
         /// <returns>Success message if the book is updated successfully or an error message if validation fails.</returns>
+        [Authorize(Roles = "Library Manager")]
         [HttpPut("{bookId}")]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> UpdateBook(int bookId, [FromBody] Book book)
@@ -165,6 +171,7 @@ namespace Assignment5.WebAPI.Controllers
         /// </remarks>
         /// <param name="bookId">The ID of the book to be deleted.</param>
         /// <returns>Success message if the book is deleted successfully or an error message if the book is not found.</returns>
+        [Authorize(Roles = "Library Manager")]
         [HttpDelete("{bookId}")]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> DeleteBook(int bookId,[FromBody] string reason)
@@ -197,6 +204,7 @@ namespace Assignment5.WebAPI.Controllers
         /// <param name="query">Search criteria including title, author, ISBN, and category. These parameters are optional.</param>
         /// <param name="pagination">Pagination details including page number and page size.</param>
         /// <returns>A list of books that match the search criteria, along with pagination details.</returns>
+        [Authorize(Roles = "Library Manager, Librarian, Library User")]
         [HttpGet("search")]
         [MapToApiVersion("1.0")]
         public async Task<IActionResult> Search([FromQuery] SearchDto query, [FromQuery] paginationDto pagination)

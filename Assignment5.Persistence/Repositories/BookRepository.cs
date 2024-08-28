@@ -35,7 +35,7 @@ namespace Assignment5.Persistence.Repositories
             return book;
         }
 
-        public async Task<IEnumerable<ShowBookDto>> GetAllBooks(paginationDto pagination)
+        public async Task<IEnumerable<BookDto>> GetAllBooks(paginationDto pagination)
         {
             var books = _context.Books
                 .Where(cek => !cek.status.Contains("Deleted"));
@@ -45,7 +45,7 @@ namespace Assignment5.Persistence.Repositories
             return await books
                 .Skip(skipNumber)
                 .Take(pagination.pageSize)
-                .Select(b => new ShowBookDto
+                .Select(b => new BookDto
                 {
                     Id = b.bookId,
                     category = b.category,
@@ -62,11 +62,11 @@ namespace Assignment5.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ShowBookDto> GetBookById(int bookId)
+        public async Task<BookDto> GetBookById(int bookId)
         {
             var existingBook = await _context.Books
                 .Where(cek => cek.bookId == bookId)
-                .Select(b => new ShowBookDto
+                .Select(b => new BookDto
                 {
                     Id = b.bookId,
                     category = b.category,
@@ -148,7 +148,7 @@ namespace Assignment5.Persistence.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<ShowBookDto>> Search(SearchDto query, paginationDto pagination)
+        public async Task<IEnumerable<BookDto>> Search(SearchDto query, paginationDto pagination)
         {
             var search = _context.Books.AsQueryable();
 
@@ -181,13 +181,12 @@ namespace Assignment5.Persistence.Repositories
                     search = search.Where(b => b.language.ToLower().Contains(query.language.ToLower()));
             }
 
-            // Paginasi
             var skipNumber = (pagination.pageNumber - 1) * pagination.pageSize;
 
             return await search
                 .Skip(skipNumber)
                 .Take(pagination.pageSize)
-                .Select(b => new ShowBookDto
+                .Select(b => new BookDto
                 {
                     Id = b.bookId,
                     category = b.category,

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment5.Application.DTOs
 {
-    public class ShowBookDto
+    public class BookDto
     {
         public int Id { get; set; }
         public string? category { get; set; }
