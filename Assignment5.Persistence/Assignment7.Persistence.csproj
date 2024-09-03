@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assignment5.Application\Assignment6.Application.csproj" />
-    <ProjectReference Include="..\Assignment5.Domain\Assignment6.Domain.csproj" />
+    <ProjectReference Include="..\Assignment5.Application\Assignment7.Application.csproj" />
+    <ProjectReference Include="..\Assignment5.Domain\Assignment7.Domain.csproj" />
   </ItemGroup>
 
 </Project>

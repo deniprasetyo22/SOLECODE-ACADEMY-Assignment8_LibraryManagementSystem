@@ -1,5 +1,9 @@
 using Asp.Versioning;
 using Assignment5.Persistence;
+using Assignment7.Application.Interfaces.IService;
+using Assignment7.Application.Services;
+using Assignment7.Domain.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -14,9 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 //Swagger Documentation Section
 var info = new OpenApiInfo()
 {
-    Title = "Assignment 5 Library Management System",
+    Title = "Assignment 7 Library Management System",
     Version = "v1",
-    Description = "Assignment 5 Library Management System",
+    Description = "Assignment 7 Library Management System",
     Contact = new OpenApiContact()
     {
         Name = "Deni Prasetyo",
@@ -80,6 +84,21 @@ builder.Services.AddApiVersioning(option =>
 // Panggil ConfigurePersistence
 builder.Services.ConfigurePersistence(builder.Configuration);
 
+//MailSettings
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
+var emailConfig = builder.Configuration
+        .GetSection("MailSettings")
+        .Get<MailSettings>();
+builder.Services.AddSingleton(emailConfig);
+
+builder.Services.Configure<FormOptions>(o => {
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -93,7 +112,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.RoutePrefix = "swagger";
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Assignment 5 Library Management System V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Assignment 7 Library Management System V1");
     });
 }
 

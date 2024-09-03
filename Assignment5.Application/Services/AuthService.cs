@@ -1,6 +1,9 @@
 ﻿using Assignment5.Application.DTOs.Account;
 using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
+using Assignment7.Application.Interfaces.IService;
+using Assignment7.Domain.Models.Mail;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -20,12 +24,14 @@ namespace Assignment5.Application.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _emailService = emailService;
         }
         //Sign Up The User
         public async Task<ResponseModel> SignUpAsync(RegisterModel model)
@@ -46,6 +52,38 @@ namespace Assignment5.Application.Services
                 Status = "Error",
                 Message = "User creation failed! Please check user details and try again."
             };
+
+            var emailBody = System.IO.File.ReadAllText(@"./Templates/EmailTemplate/register.html");
+            emailBody = string.Format(emailBody,
+                "Library Management System", //{0}
+                model.Username,              //{1}
+                model.Email,                 //{2}
+                model.Username,              //{3}
+                model.Password               //{4}
+            );
+
+            var mailData = new MailData
+            {
+                EmailToIds = new List<string> { model.Email },
+                EmailCCIds = new List<string> { "deni.prasetyo@solecode.id" },
+                EmailToName = model.Username,
+                EmailSubject = "Welcome to Our Service!",
+                EmailBody = emailBody,
+                Password = model.Password,
+                Attachments = new List<string> { @"./Templates/EmailTemplate/c#.png" }
+            };
+
+            var emailSent = _emailService.SendMail(mailData);
+
+            if (!emailSent)
+            {
+                return new ResponseModel
+                {
+                    Status = "SuccessWithWarning",
+                    Message = "User created successfully, but failed to send confirmation email."
+                };
+            }
+
             return new ResponseModel { Status = "Success", Message = "User created succesfully!" };
         }
 

@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{8ED14C18-CC8E-4CE5-BBC4-B201F6F85B74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment6.Domain", "Assignment5.Domain\Assignment6.Domain.csproj", "{F8D50588-5226-416A-9D53-F017717DA370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment7.Domain", "Assignment5.Domain\Assignment7.Domain.csproj", "{F8D50588-5226-416A-9D53-F017717DA370}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment6.Persistence", "Assignment5.Persistence\Assignment6.Persistence.csproj", "{B75126BB-BA8A-4C36-ABBA-1802EC05505A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment7.Persistence", "Assignment5.Persistence\Assignment7.Persistence.csproj", "{B75126BB-BA8A-4C36-ABBA-1802EC05505A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment6.WebAPI", "Assignment5.WebAPI\Assignment6.WebAPI.csproj", "{9558AFEA-7E39-4A1B-91CC-200DB912261F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment7.WebAPI", "Assignment5.WebAPI\Assignment7.WebAPI.csproj", "{9558AFEA-7E39-4A1B-91CC-200DB912261F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment6.Application", "Assignment5.Application\Assignment6.Application.csproj", "{7D0E98DA-7B48-4B72-8AC0-FEBAF425F234}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment7.Application", "Assignment5.Application\Assignment7.Application.csproj", "{7D0E98DA-7B48-4B72-8AC0-FEBAF425F234}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

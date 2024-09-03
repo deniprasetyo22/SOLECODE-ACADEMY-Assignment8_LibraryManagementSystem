@@ -1,5 +1,7 @@
 ﻿using Assignment5.Application.DTOs.Account;
 using Assignment5.Application.Interfaces.IService;
+using Assignment7.Application.Interfaces.IService;
+using Assignment7.Domain.Models.Mail;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,12 @@ namespace Assignment5.WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IEmailService emailService)
         {
             _authService = authService;
+            _emailService = emailService;
         }
 
         [HttpPost("register")]
@@ -23,9 +27,10 @@ namespace Assignment5.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var result = await _authService.SignUpAsync(model);
 
-            if (result.Status == "Error")
+            if (result.Status == "Error" || result.Status == "SuccessWithWarning")
             {
                 return BadRequest(result.Message);
             }
@@ -82,5 +87,6 @@ namespace Assignment5.WebAPI.Controllers
             }
             return BadRequest(response);
         }
+
     }
 }
