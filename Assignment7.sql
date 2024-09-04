@@ -23,7 +23,7 @@ CREATE TABLE WorkflowSequences (
     RequiredRole VARCHAR(255),
 	NextStepId INT,
     FOREIGN KEY (WorkflowId) REFERENCES Workflow(WorkflowId) ON DELETE CASCADE,
-	FOREIGN KEY (RequiredRole) REFERENCES public."AspNetRoles"("Id")
+	FOREIGN KEY (RequiredRole) REFERENCES public."AspNetRoles"("Id"),
 	FOREIGN KEY (NextStepId) REFERENCES WorkflowSequences(StepId) ON DELETE CASCADE
 );
 
