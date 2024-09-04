@@ -1,4 +1,4 @@
--- Table: Workflow
+- Table: Workflow
 CREATE TABLE Workflow (
     WorkflowId SERIAL PRIMARY KEY,
     WorkflowName VARCHAR(255),
@@ -21,8 +21,10 @@ CREATE TABLE WorkflowSequences (
     StepOrder INT,
     StepName VARCHAR(255),
     RequiredRole VARCHAR(255),
-    FOREIGN KEY (WorkflowId) REFERENCES Workflow(WorkflowId),
+	NextStepId INT,
+    FOREIGN KEY (WorkflowId) REFERENCES Workflow(WorkflowId) ON DELETE CASCADE,
 	FOREIGN KEY (RequiredRole) REFERENCES public."AspNetRoles"("Id")
+	FOREIGN KEY (NextStepId) REFERENCES WorkflowSequences(StepId) ON DELETE CASCADE
 );
 
 -- Table: Requests
@@ -35,10 +37,10 @@ CREATE TABLE Requests (
     CurrentStepId INT,
     RequestDate TIMESTAMP,
     ProcessId INT,
-    FOREIGN KEY (WorkflowId) REFERENCES Workflow(WorkflowId),
+    FOREIGN KEY (WorkflowId) REFERENCES Workflow(WorkflowId) ON DELETE CASCADE,
     FOREIGN KEY (RequesterId) REFERENCES public."AspNetUsers"("Id"),
-    FOREIGN KEY (CurrentStepId) REFERENCES WorkflowSequences(StepId),
-    FOREIGN KEY (ProcessId) REFERENCES Process(ProcessId)
+    FOREIGN KEY (CurrentStepId) REFERENCES WorkflowSequences(StepId) ON DELETE CASCADE,
+    FOREIGN KEY (ProcessId) REFERENCES Process(ProcessId) ON DELETE CASCADE
 );
 
 -- Table: WorkflowActions
@@ -50,7 +52,7 @@ CREATE TABLE WorkflowActions (
     Action VARCHAR(255),
     ActionDate TIMESTAMP,
     Comments TEXT,
-    FOREIGN KEY (RequestId) REFERENCES Requests(RequestId),
-    FOREIGN KEY (StepId) REFERENCES WorkflowSequences(StepId),
+    FOREIGN KEY (RequestId) REFERENCES Requests(RequestId) ON DELETE CASCADE,
+    FOREIGN KEY (StepId) REFERENCES WorkflowSequences(StepId) ON DELETE CASCADE,
     FOREIGN KEY (ActorId) REFERENCES public."AspNetUsers"("Id")
 );
