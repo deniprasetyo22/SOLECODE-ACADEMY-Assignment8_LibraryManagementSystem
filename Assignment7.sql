@@ -1,4 +1,4 @@
-- Table: Workflow
+-- Table: Workflow
 CREATE TABLE Workflow (
     WorkflowId SERIAL PRIMARY KEY,
     WorkflowName VARCHAR(255),
