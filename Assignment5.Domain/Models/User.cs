@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assignment7.Persistence.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,5 +36,11 @@ namespace Assignment5.Domain.Models
 
         [StringLength(255)]
         public string? notes { get; set; }
+
+        public string? AppUserId { get; set; }
+
+        [ForeignKey("AppUserId")]
+        [InverseProperty("Users")]
+        public virtual AspNetUser? AppUser { get; set; }
     }
 }

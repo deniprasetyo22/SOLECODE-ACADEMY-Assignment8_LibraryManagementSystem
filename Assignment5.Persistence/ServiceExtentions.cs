@@ -4,7 +4,11 @@ using Assignment5.Application.Services;
 using Assignment5.Domain.Models;
 using Assignment5.Persistence.Context;
 using Assignment5.Persistence.Repositories;
+using Assignment7.Application.Interfaces.IRepositories;
+using Assignment7.Application.Interfaces.IService;
+using Assignment7.Application.Services;
 using Assignment7.Domain.Models;
+using Assignment7.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,9 +34,8 @@ namespace Assignment5.Persistence
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
-            //services.AddScoped<IBorrowService, BorrowService>();
-            //services.AddScoped<IBorrowRepository, BorrowRepository>();
-            //services.AddControllers();
+            services.AddScoped<IBookRequestRepository, BookRequestRepository>();
+            services.AddScoped<IBookRequestService, BookRequestService>();
 
             services.AddScoped<IAuthService, AuthService>();
 
@@ -66,6 +69,8 @@ namespace Assignment5.Persistence
 
                     };
                 });
+
+            services.AddHttpContextAccessor();
 
             return services;
         }

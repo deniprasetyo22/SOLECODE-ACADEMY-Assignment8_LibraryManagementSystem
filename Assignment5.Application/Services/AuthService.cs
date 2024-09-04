@@ -1,4 +1,5 @@
 ﻿using Assignment5.Application.DTOs.Account;
+using Assignment5.Application.Interfaces.IRepositories;
 using Assignment5.Application.Interfaces.IService;
 using Assignment5.Domain.Models;
 using Assignment7.Application.Interfaces.IService;
@@ -25,13 +26,15 @@ namespace Assignment5.Application.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailService emailService)
+        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IEmailService emailService, IUserRepository userRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _emailService = emailService;
+            _userRepository = userRepository;
         }
         //Sign Up The User
         public async Task<ResponseModel> SignUpAsync(RegisterModel model)
@@ -52,6 +55,21 @@ namespace Assignment5.Application.Services
                 Status = "Error",
                 Message = "User creation failed! Please check user details and try again."
             };
+
+            await _userManager.UpdateAsync(user);
+
+            User newUser = new User
+            {
+                firstName = model.FirstName,
+                lastName = model.LastName,
+                position = model.Position,
+                privilage = model.Privilage,
+                libraryCardNumber = model.LibraryCardNumber,
+                notes = model.Notes,
+                AppUserId = user.Id
+            };
+
+            await _userRepository.AddUser(newUser);
 
             var emailBody = System.IO.File.ReadAllText(@"./Templates/EmailTemplate/register.html");
             emailBody = string.Format(emailBody,
