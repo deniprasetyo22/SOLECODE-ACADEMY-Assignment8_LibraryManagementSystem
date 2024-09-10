@@ -10,6 +10,6 @@ namespace Assignment7.Application.Interfaces.IService
     public interface IBookRequestService
     {
         Task<Bookrequest> AddBookRequestAsync(Bookrequest bookRequest);
-        Task<IEnumerable<Bookrequest>> GetAllBookRequestAsync();
+        Task ApproveOrRejectBookRequestAsync(int processId, Process process);
     }
 }

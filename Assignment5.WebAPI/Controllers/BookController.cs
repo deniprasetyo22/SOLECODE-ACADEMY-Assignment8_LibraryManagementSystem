@@ -215,5 +215,15 @@ namespace Assignment5.WebAPI.Controllers
 
             return Ok(search);
         }
+
+        [Authorize]
+        [HttpGet("report")]
+        public async Task<IActionResult> Report()
+        {
+            var Filename = "BookReport.pdf";
+            var file = await _bookService.GenerateReportPdf();
+            return File(file, "application/pdf", Filename);
+        }
+
     }
 }

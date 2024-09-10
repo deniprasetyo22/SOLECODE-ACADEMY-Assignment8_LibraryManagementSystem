@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Assignment5.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment7.Persistence.Models;
@@ -27,30 +28,27 @@ public partial class Process
 
     [Column("status")]
     [StringLength(255)]
-    public string? Status { get; set; } = "Pending";
+    public string? Status { get; set; }
 
     [Column("currentstepid")]
-    public int? Currentstepid { get; set; } = 2;
+    public int? Currentstepid { get; set; }
 
     [Column("requestdate", TypeName = "timestamp without time zone")]
-    public DateTime? Requestdate { get; set; } = DateTime.Now;
+    public DateTime? Requestdate { get; set; }
 
-    [InverseProperty("Process")] 
+    [InverseProperty("Process")]
     public virtual ICollection<Bookrequest> Bookrequests { get; set; } = new List<Bookrequest>();
 
     [ForeignKey("Currentstepid")]
     [InverseProperty("Processes")]
-    [JsonIgnore]
     public virtual Workflowsequence? Currentstep { get; set; }
 
     [ForeignKey("Requesterid")]
     [InverseProperty("Processes")]
-    [JsonIgnore]
-    public virtual AspNetUser? Requester { get; set; }
+    public virtual AppUser? Requester { get; set; }
 
     [ForeignKey("Workflowid")]
     [InverseProperty("Processes")]
-    [JsonIgnore]
     public virtual Workflow? Workflow { get; set; }
 
     [InverseProperty("Request")]

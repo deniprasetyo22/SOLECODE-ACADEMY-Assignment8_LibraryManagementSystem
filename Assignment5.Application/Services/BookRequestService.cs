@@ -15,32 +15,19 @@ namespace Assignment7.Application.Services
     public class BookRequestService:IBookRequestService
     {
         private readonly IBookRequestRepository _bookRequestRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<AppUser> _userManager;
 
-        public BookRequestService(IBookRequestRepository bookRequestRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
+        public BookRequestService(IBookRequestRepository bookRequestRepository)
         {
             _bookRequestRepository = bookRequestRepository;
-            _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
         }
         public async Task<Bookrequest> AddBookRequestAsync(Bookrequest bookRequest)
         {
-            // Get current user ID from HttpContext
-            var userName = _httpContextAccessor.HttpContext!.User.Identity!.Name;
-
-            var user = await _userManager.FindByNameAsync(userName!);
-
-            var userId = user!.Id;
-
-            bookRequest.Process.Requesterid = userId;
-
             return await _bookRequestRepository.AddBookRequestAsync(bookRequest);
         }
 
-        public async Task<IEnumerable<Bookrequest>> GetAllBookRequestAsync()
+        public async Task ApproveOrRejectBookRequestAsync(int processId, Process process)
         {
-            return await _bookRequestRepository.GetAllBookRequestAsync();
+            await _bookRequestRepository.ApproveOrRejectBookRequestAsync(processId, process);
         }
     }
 }

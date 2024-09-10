@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assignment7.Persistence.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -59,5 +60,8 @@ namespace Assignment5.Domain.Models
 
         [StringLength(255)]
         public string? language {  get; set; }
+
+        [InverseProperty("Book")] // This points to the property in the Borrow class
+        public virtual ICollection<Borrow> Borrows { get; set; } = new List<Borrow>();
     }
 }

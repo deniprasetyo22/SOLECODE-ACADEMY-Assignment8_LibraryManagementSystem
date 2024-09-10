@@ -167,5 +167,14 @@ namespace Assignment5.WebAPI.Controllers
 
             return Ok("User deleted successfully.");
         }
+
+        [Authorize(Roles = "Library Manager")]
+        [HttpGet("report")]
+        public async Task<IActionResult> Report()
+        {
+            var Filename = "BookReport.pdf";
+            var file = await _userService.GenerateReportPdf();
+            return File(file, "application/pdf", Filename);
+        }
     }
 }

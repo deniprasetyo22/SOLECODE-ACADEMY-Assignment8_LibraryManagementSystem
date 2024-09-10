@@ -15,5 +15,6 @@ namespace Assignment5.Application.Interfaces.IService
         Task<User> GetUserById(int userId);
         Task<bool> UpdateUser(int userId, User user);
         Task<bool> DeleteUser(int userId);
+        Task<byte[]> GenerateReportPdf();
     }
 }

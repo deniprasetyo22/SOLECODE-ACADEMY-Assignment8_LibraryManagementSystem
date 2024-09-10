@@ -41,6 +41,6 @@ namespace Assignment5.Domain.Models
 
         [ForeignKey("AppUserId")]
         [InverseProperty("Users")]
-        public virtual AspNetUser? AppUser { get; set; }
+        public virtual AppUser? AppUser { get; set; }
     }
 }

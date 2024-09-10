@@ -16,5 +16,6 @@ namespace Assignment5.Application.Interfaces.IService
         Task<bool> UpdateBook(int bookId, Book book);
         Task<bool> DeleteBook(int bookId, string reason);
         Task<IEnumerable<BookDto>> Search(SearchDto query, paginationDto pagination);
+        Task<byte[]> GenerateReportPdf();
     }
 }

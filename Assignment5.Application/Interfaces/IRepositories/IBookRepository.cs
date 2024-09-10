@@ -1,5 +1,6 @@
 ﻿using Assignment5.Application.DTOs;
 using Assignment5.Domain.Models;
+using Assignment7.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace Assignment5.Application.Interfaces.IRepositories
         Task<bool> UpdateBook(int bookId, Book book);
         Task<bool> DeleteBook(int bookId, string reason);
         Task<IEnumerable<BookDto>> Search(SearchDto query, paginationDto pagination);
+        Task<IEnumerable<BookReportDto>> GetBookReportDtos();
     }
 }

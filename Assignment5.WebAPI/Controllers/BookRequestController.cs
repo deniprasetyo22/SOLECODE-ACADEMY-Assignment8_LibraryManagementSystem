@@ -19,9 +19,9 @@ namespace Assignment7.WebAPI.Controllers
             _bookRequestService = bookRequestService;
         }
 
-        [Authorize(Roles = "Library Manager")]
+        [Authorize(Roles = "Library User")]
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Bookrequest bookRequest)
+        public async Task<IActionResult> CreateBookRequest([FromBody] Bookrequest bookRequest)
         {
             if (bookRequest == null)
             {
@@ -33,12 +33,13 @@ namespace Assignment7.WebAPI.Controllers
             return Ok(addBookRequest);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllBookRequest()
+        [Authorize(Roles = "Librarian, Library Manager")]
+        [HttpPut("approveOrReject/{processId}")]
+        public async Task<IActionResult> approveOrRejectBookRequestAsync(int processId, [FromBody] Process process)
         {
-            var requests = await _bookRequestService.GetAllBookRequestAsync();
-
-            return Ok(requests);
+            await _bookRequestService.ApproveOrRejectBookRequestAsync(processId, process);
+            return Ok();
         }
+
     }
 }

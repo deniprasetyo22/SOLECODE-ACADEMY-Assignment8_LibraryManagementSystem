@@ -90,7 +90,7 @@ builder.Services.AddApiVersioning(option =>
 // Panggil ConfigurePersistence
 builder.Services.ConfigurePersistence(builder.Configuration);
 
-//MailSettings
+//Email Settings
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
 var emailConfig = builder.Configuration

@@ -2,6 +2,7 @@
 using Assignment5.Application.Interfaces.IRepositories;
 using Assignment5.Domain.Models;
 using Assignment5.Persistence.Context;
+using Assignment7.Application.DTOs;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -203,6 +204,20 @@ namespace Assignment5.Persistence.Repositories
                 .ToListAsync();
         }
 
-
+        public async Task<IEnumerable<BookReportDto>> GetBookReportDtos()
+        {
+            return await _context.Books
+                .Select(book => new BookReportDto
+                {
+                    Id = book.bookId,
+                    category = book.category,
+                    title = book.title,
+                    author = book.author,
+                    publisher = book.publisher,
+                    price = book.price,
+                    totalBook = book.totalBook
+                })
+                .ToListAsync();
+        }
     }
 }

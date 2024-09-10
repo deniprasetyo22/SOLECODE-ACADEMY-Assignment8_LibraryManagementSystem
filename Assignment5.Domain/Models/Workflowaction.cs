@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Assignment5.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment7.Persistence.Models;
@@ -35,7 +36,7 @@ public partial class Workflowaction
 
     [ForeignKey("Actorid")]
     [InverseProperty("Workflowactions")]
-    public virtual AspNetUser? Actor { get; set; }
+    public virtual AppUser? Actor { get; set; }
 
     [ForeignKey("Requestid")]
     [InverseProperty("Workflowactions")]

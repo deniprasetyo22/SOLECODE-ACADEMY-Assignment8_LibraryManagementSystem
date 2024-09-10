@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Assignment5.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment7.Persistence.Models;
@@ -11,7 +12,6 @@ public partial class Workflowsequence
 {
     [Key]
     [Column("stepid")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Stepid { get; set; }
 
     [Column("workflowid")]
@@ -28,22 +28,18 @@ public partial class Workflowsequence
     [StringLength(255)]
     public string? Requiredrole { get; set; }
 
-    [Column("nextstepid")]
-    public int? Nextstepid { get; set; }
+    [InverseProperty("Currentstep")]
+    public virtual ICollection<Nextsteprule> NextstepruleCurrentsteps { get; set; } = new List<Nextsteprule>();
 
     [InverseProperty("Nextstep")]
-    public virtual ICollection<Workflowsequence> InverseNextstep { get; set; } = new List<Workflowsequence>();
-
-    [ForeignKey("Nextstepid")]
-    [InverseProperty("InverseNextstep")]
-    public virtual Workflowsequence? Nextstep { get; set; }
+    public virtual ICollection<Nextsteprule> NextstepruleNextsteps { get; set; } = new List<Nextsteprule>();
 
     [InverseProperty("Currentstep")]
     public virtual ICollection<Process> Processes { get; set; } = new List<Process>();
 
     [ForeignKey("Requiredrole")]
     [InverseProperty("Workflowsequences")]
-    public virtual AspNetRole? RequiredroleNavigation { get; set; }
+    public virtual AppUser? RequiredroleNavigation { get; set; }
 
     [ForeignKey("Workflowid")]
     [InverseProperty("Workflowsequences")]
