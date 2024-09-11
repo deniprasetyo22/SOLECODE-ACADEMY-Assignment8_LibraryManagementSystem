@@ -18,5 +18,7 @@ namespace Assignment5.Application.Interfaces.IRepositories
         Task<bool> DeleteBook(int bookId, string reason);
         Task<IEnumerable<BookDto>> Search(SearchDto query, paginationDto pagination);
         Task<IEnumerable<BookReportDto>> GetBookReportDtos();
+        Task<int> GetTotalBook();
+        Task<IEnumerable<NumberOfBooksPerCategory>> NumberOfBooksPerCategory();
     }
 }

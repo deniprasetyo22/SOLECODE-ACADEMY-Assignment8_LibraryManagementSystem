@@ -219,5 +219,25 @@ namespace Assignment5.Persistence.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<int> GetTotalBook()
+        {
+            return await _context.Books
+                .Where(b => !b.status.Contains("Deleted"))
+                .SumAsync(b => b.totalBook);
+        }
+
+        public async Task<IEnumerable<NumberOfBooksPerCategory>> NumberOfBooksPerCategory()
+        {
+            return await _context.Books
+                .Where(b => b.status == null || !b.status.Contains("Deleted"))
+                .GroupBy(b => b.category)
+                .Select(g => new NumberOfBooksPerCategory
+                {
+                    Category = g.Key,
+                    TotalBooks = g.Sum(b => b.totalBook)
+                })
+                .ToListAsync();
+        }
     }
 }

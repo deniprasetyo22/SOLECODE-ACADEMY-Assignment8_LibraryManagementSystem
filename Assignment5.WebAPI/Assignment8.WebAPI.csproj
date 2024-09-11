@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Assignment5.Application\Assignment7.Application.csproj" />
-    <ProjectReference Include="..\Assignment5.Persistence\Assignment7.Persistence.csproj" />
+    <ProjectReference Include="..\Assignment5.Application\Assignment8.Application.csproj" />
+    <ProjectReference Include="..\Assignment5.Persistence\Assignment8.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Assignment5.Domain.Models;
 using Assignment5.Persistence.Context;
+using Assignment7.Application.DTOs;
 using Assignment7.Application.Interfaces.IRepositories;
 using Assignment7.Application.Interfaces.IService;
 using Assignment7.Domain.Models.Mail;
@@ -284,6 +285,24 @@ namespace Assignment7.Persistence.Repositories
             }
         }
 
+        public async Task<int> NumberOfProcessAsync()
+        {
+            return await _context.Processes.CountAsync();
+        }
 
+        public async Task<List<ProcessDto>> GetAllProcessesAsync()
+        {
+            return await _context.Processes
+                .Select(p => new ProcessDto
+                {
+                    Processid = p.Processid,
+                    Workflowid = p.Workflowid,
+                    RequesterUsername = p.Requester.UserName,
+                    Requestdate = p.Requestdate,
+                    Status = p.Status,
+                    CurrentstepName = p.Currentstep.Stepname
+                })
+                .ToListAsync();
+        }
     }
 }

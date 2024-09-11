@@ -38,6 +38,7 @@ namespace Assignment5.Persistence
             services.AddScoped<IBookRequestService, BookRequestService>();
             services.AddScoped<IBorrowRepository, BorrowRepository>();
             services.AddScoped<IBorrowService, BorrowService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddScoped<IAuthService, AuthService>();
 

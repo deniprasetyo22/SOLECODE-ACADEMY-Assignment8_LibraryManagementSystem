@@ -1,4 +1,5 @@
 ﻿using Assignment5.Persistence.Context;
+using Assignment7.Application.DTOs;
 using Assignment7.Application.Interfaces.IRepositories;
 using Assignment7.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Assignment7.Persistence.Repositories
     public class BorrowRepository : IBorrowRepository
     {
         private readonly LibraryContext _context;
-        private const int MaxBookBorrowed = 5; // Ganti dengan nilai sesuai kebutuhan
+        private const int MaxBookBorrowed = 3; // Ganti dengan nilai sesuai kebutuhan
         private const int DurationBookLoans = 14; // Ganti dengan nilai sesuai kebutuhan
 
         public BorrowRepository(LibraryContext context)
@@ -162,6 +163,42 @@ namespace Assignment7.Persistence.Repositories
             _context.Borrows.Remove(existingBorrow);
             await _context.SaveChangesAsync();
             return (true, "Borrow record deleted successfully.");
+        }
+
+        public async Task<List<MostActiveMemberDto>> GetMostActiveMembers()
+        {
+            // Mengambil 10 user dengan aktivitas peminjaman terbanyak
+            // Menghitung jumlah peminjaman per user
+            var mostActiveMembers = _context.Borrows
+                .GroupBy(b => b.Userid)
+                .OrderByDescending(g => g.Count())
+                .Take(10)
+                .Select(g => new MostActiveMemberDto
+                {
+                    Name = g.First().User.UserName, // Mengambil nama user dari peminjaman pertama di grup
+                    BorrowTotal = g.Count()
+                })
+                .ToList();
+
+            return mostActiveMembers;
+        }
+
+        public async Task<IEnumerable<OverdueDto>> GetOverdueBooks()
+        {
+            // Mendapatkan borrow yang memiliki penalty tidak null atau dateofreturn null
+            var overdueBooks = await _context.Borrows
+                .Where(b => !string.IsNullOrEmpty(b.Penalty) || b.Dateofreturn == null)
+                .Select(b => new OverdueDto
+                {
+                    Borrowid = b.Borrowid,
+                    Userid = b.User.UserName,
+                    Bookid = b.Bookid,
+                    Deadlinereturn = b.Deadlinereturn,
+                    Dateofreturn = b.Dateofreturn,
+                })
+                .ToListAsync();
+
+            return overdueBooks;
         }
     }
 

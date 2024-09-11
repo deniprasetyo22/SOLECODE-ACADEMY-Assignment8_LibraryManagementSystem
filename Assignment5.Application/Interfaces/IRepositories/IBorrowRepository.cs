@@ -1,4 +1,6 @@
-﻿using Assignment7.Persistence.Models;
+﻿using Assignment7.Application.DTOs;
+using Assignment7.Persistence.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +17,7 @@ namespace Assignment7.Application.Interfaces.IRepositories
         Task<bool> ReturnBook(int borrowId);
         Task<(bool IsSuccess, string Message)> UpdateBorrow(int borrowId, Borrow updatedBorrow);
         Task<(bool IsSuccess, string Message)> DeleteBorrow(int borrowId);
+        Task<List<MostActiveMemberDto>> GetMostActiveMembers();
+        Task<IEnumerable<OverdueDto>> GetOverdueBooks();
     }
 }
