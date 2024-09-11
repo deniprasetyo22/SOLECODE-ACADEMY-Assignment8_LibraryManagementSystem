@@ -17,7 +17,7 @@ namespace Assignment7.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Library Manager")]
         public async Task<IActionResult> GetDashboardReport()
         {
             try
@@ -31,6 +31,22 @@ namespace Assignment7.WebAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("get-processes")]
+        public async Task<IActionResult> GetAllProcesses()
+        {
+            try
+            {
+                var processes = await _dashboardService.GetAllProcessesAsync();
+                return Ok(processes);
+            }
+            catch (Exception ex)
+            {
+                // Tangani kesalahan
+                return StatusCode(500, $"Terjadi kesalahan: {ex.Message}");
+            }
+        }
+
 
         //[HttpGet("get-total-books")]
         //public async Task<IActionResult> GetTotalBook()
@@ -72,21 +88,6 @@ namespace Assignment7.WebAPI.Controllers
         //    {
         //        var count = await _dashboardService.NumberOfProcessAsync();
         //        return Ok(count);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Tangani kesalahan
-        //        return StatusCode(500, $"Terjadi kesalahan: {ex.Message}");
-        //    }
-        //}
-
-        //[HttpGet("get-processes")]
-        //public async Task<IActionResult> GetAllProcesses()
-        //{
-        //    try
-        //    {
-        //        var processes = await _dashboardService.GetAllProcessesAsync();
-        //        return Ok(processes);
         //    }
         //    catch (Exception ex)
         //    {

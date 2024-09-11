@@ -36,7 +36,6 @@ namespace Assignment7.Application.Services
             var overdueBooks = await _borrowRepository.GetOverdueBooks();
             var booksPerCategory = await _bookRepository.NumberOfBooksPerCategory();
             var numberOfProcesses = await _bookRequestRepository.NumberOfProcessAsync();
-            var allProcesses = await _bookRequestRepository.GetAllProcessesAsync();
 
             return new DashboardDto
             {
@@ -44,9 +43,13 @@ namespace Assignment7.Application.Services
                 MostActiveMembers = mostActiveMembers,
                 OverdueBooks = overdueBooks,
                 BooksPerCategory = booksPerCategory,
-                NumberOfProcesses = numberOfProcesses,
-                AllProcesses = allProcesses
+                NumberOfProcesses = numberOfProcesses
             };
+        }
+
+        public async Task<List<ProcessDto>> GetAllProcessesAsync()
+        {
+            return await _bookRequestRepository.GetAllProcessesAsync();
         }
 
         //public async Task<byte[]> DashboardReportPdf()
@@ -143,11 +146,6 @@ namespace Assignment7.Application.Services
         //public async Task<int> NumberOfProcessAsync()
         //{
         //    return await _bookRequestRepository.NumberOfProcessAsync();
-        //}
-
-        //public async Task<List<Process>> GetAllProcessesAsync()
-        //{
-        //    return await _bookRequestRepository.GetAllProcessesAsync();
         //}
 
     }

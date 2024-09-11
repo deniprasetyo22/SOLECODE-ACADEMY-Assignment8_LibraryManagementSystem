@@ -17,7 +17,7 @@ namespace Assignment7.Application.Interfaces.IService
         //Task<IEnumerable<Borrow>> GetOverdueBooks();
         //Task<IEnumerable<NumberOfBooksPerCategory>> NumberOfBooksPerCategory();
         //Task<int> NumberOfProcessAsync();
-        //Task<List<Process>> GetAllProcessesAsync();
+        Task<List<ProcessDto>> GetAllProcessesAsync();
         Task<DashboardDto> GetDashboardReportAsync();
     }
 }
